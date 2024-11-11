@@ -1,0 +1,98 @@
+/* Cambiar el color de fondo de la página */
+body {
+    background-color: #e8dfdf;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilos generales */
+.container-master {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+}
+
+.container {
+    margin: 15px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: center;
+}
+
+/* Estilo para la barra de rango del potenciómetro */
+#potentiometer-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 10px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+}
+
+#potentiometer-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #2980b9;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#potentiometer-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: #2980b9;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Estilos específicos para los botones de encendido y apagado de LEDs */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: -10px; /* Ajuste para posicionar cerca del recuadro */
+}
+
+.button-container a {
+    margin: 5px;
+}
+
+#led-1-on-btn button, #led-2-on-btn button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+#led-1-on-btn button:hover, #led-2-on-btn button:hover {
+    background-color: #2980b9;
+}
+
+#led-1-off-btn button, #led-2-off-btn button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+#led-1-off-btn button:hover, #led-2-off-btn button:hover {
+    background-color: #c0392b;
+}

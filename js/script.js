@@ -12,60 +12,55 @@ function updateStatus() {
             document.getElementById('led-1-status').innerHTML = 'LED 1 está <strong>' + led1Status + '</strong>.';
             document.getElementById('led-2-status').innerHTML = 'LED 2 está <strong>' + led2Status + '</strong>.';
             document.getElementById('led-3-status').innerHTML = 'LED 3 está a <strong>' + led3Status + '</strong>.';
+
+            // Actualiza la gráfica con el valor de LED 3
+            updateGaugeChart(led3Status);
         })
         .catch(error => console.error('Error al obtener el estado de los LEDs:', error));
 }
 
-
-function getPotentiometerValue() {
-    fetch('/potentiometer?' + new Date().getTime())
-        .then(response => response.json())
-        .then(data => {
-            // Actualiza el texto con el valor del potenciómetro
-            const potentiometerValue = data.potentiometer_value;
-            document.getElementById('potenciometer-value').innerHTML = 
-                'Valor del potenciómetro: <strong>' + potentiometerValue + '</strong>';
-        })
-        .catch(error => console.error('Error al obtener el valor del potenciómetro:', error));
+// Inicializar el gráfico de la intensidad del LED 3
+let led3GaugeChart;
+function initializeGaugeChart() {
+    const ctx = document.getElementById('led3Gauge').getContext('2d');
+    led3GaugeChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Intensidad', ''],
+            datasets: [{
+                data: [0, 100], // Se actualiza en tiempo real
+                backgroundColor: ['#4dc9f6', '#d3d3d3'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            circumference: Math.PI,
+            rotation: Math.PI,
+            cutout: '80%',
+            plugins: {
+                tooltip: { enabled: false },
+                legend: { display: false }
+            }
+        }
+    });
 }
 
-
-
-// Función para controlar los LEDs
-function controlLED(led, action) {
-    fetch(`/LED_${action}/${led}`)
-        .then(response => response.json())
-        .then(() => updateStatus())  // Actualizar el estado de los LEDs
-        .catch(error => console.error(`Error al ${action} el ${led}:`, error));
-
-
+// Función para actualizar el gráfico de la intensidad del LED 3
+function updateGaugeChart(value) {
+    if (led3GaugeChart) {
+        led3GaugeChart.data.datasets[0].data[0] = (value / 1023) * 100; // Escala el valor de 0 a 100
+        led3GaugeChart.data.datasets[0].data[1] = 100 - ((value / 1023) * 100);
+        led3GaugeChart.update();
+    }
 }
 
-// Configuración de los botones para controlar cada LED
-document.getElementById('led-1-on-btn').addEventListener('click', function(event) {
-    event.preventDefault();
-    controlLED('LED1', 'ON');
+// Llama a la inicialización al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    updateStatus();
+    getPotentiometerValue();
+    initializeGaugeChart(); // Inicializa el gráfico
 });
-document.getElementById('led-1-off-btn').addEventListener('click', function(event) {
-    event.preventDefault();
-    controlLED('LED1', 'OFF');
-});
-document.getElementById('led-2-on-btn').addEventListener('click', function(event) {
-    event.preventDefault();
-    controlLED('LED2', 'ON');
-});
-document.getElementById('led-2-off-btn').addEventListener('click', function(event) {
-    event.preventDefault();
-    controlLED('LED2', 'OFF');
-});
-
 
 // Actualiza el estado cada 1 segundo
 setInterval(updateStatus, 1000);
 setInterval(getPotentiometerValue, 1000);
-
-// Actualiza el estado inicial al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-    updateStatus();
-    getPotentiometerValue();
-});
