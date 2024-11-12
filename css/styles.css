@@ -74,6 +74,7 @@ body {
 {
     fill: #0a5290;
     height: 35px;
+    cursor: pointer;
 }
 
 .title {
